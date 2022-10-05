@@ -18,6 +18,12 @@ public class BaiduTransResponse {
 
     private String to;
 
+    @JSONField(name = "error_code")
+    private String errorCode;
+
+    @JSONField(name = "error_msg")
+    private String errorMsg;
+
     @JSONField(name = "trans_result")
     private List<BaiduTransResult> transResults;
 }

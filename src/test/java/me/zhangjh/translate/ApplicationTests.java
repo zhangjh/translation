@@ -20,8 +20,9 @@ class ApplicationTests {
         // TODO(developer): Replace these variables before running the sample.
         // Supported Languages: https://cloud.google.com/translate/docs/languages
         String targetLanguage = "en";
+        String fromLanguage = "zh";
         String text = "你干什么吃的呀";
-        new GoogleTranslate().translateText(targetLanguage, text);
+        new GoogleTranslate().translateText(targetLanguage, fromLanguage, text);
     }
 
     @Test

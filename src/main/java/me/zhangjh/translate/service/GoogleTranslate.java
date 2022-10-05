@@ -11,7 +11,7 @@ import java.util.Map;
  * @author zhangjh
  * @date 2022/10/5
  */
-public class GoogleTranslate {
+public class GoogleTranslate extends TranslateEngine<TranslateTextResponse> {
 
     private final String projectId;
 
@@ -20,7 +20,7 @@ public class GoogleTranslate {
     }
 
     // Translate text to target language.
-    private TranslateTextResponse translateText(String projectId, String targetLanguage, String text)
+    private TranslateTextResponse translateText(String projectId, String from, String targetLanguage, String text)
             throws IOException {
 
         // Initialize client that will be used to send requests. This client only needs to be created
@@ -37,6 +37,7 @@ public class GoogleTranslate {
                     TranslateTextRequest.newBuilder()
                             .setParent(parent.toString())
                             .setMimeType("text/plain")
+                            .setSourceLanguageCode(from)
                             .setTargetLanguageCode(targetLanguage)
                             .addContents(text)
                             .build();
@@ -49,8 +50,9 @@ public class GoogleTranslate {
         return GGLanguage.getLanguages();
     }
 
-    public TranslateTextResponse translateText(String to, String text) throws IOException {
-        TranslateTextResponse response = this.translateText(projectId, to, text);
+    @Override
+    public TranslateTextResponse translateText(String query, String from, String to) throws IOException {
+        TranslateTextResponse response = this.translateText(projectId, from, to, query);
 
         // Display the translation for each input text provided
         for (Translation translation : response.getTranslationsList()) {

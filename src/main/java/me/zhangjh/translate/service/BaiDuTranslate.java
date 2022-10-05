@@ -10,7 +10,6 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
 
-import java.io.IOException;
 import java.math.BigInteger;
 import java.net.URI;
 import java.net.URLEncoder;
@@ -24,7 +23,7 @@ import java.util.Map;
  * @author zhangjh
  * @date 2022/10/5
  */
-public class BaiDuTranslate {
+public class BaiDuTranslate extends TranslateEngine<BaiduTransResponse> {
 
     private static final String URL_PRE = "http://api.fanyi.baidu.com/api/trans/vip/translate";
 
@@ -49,7 +48,8 @@ public class BaiDuTranslate {
         return BaiduLanguage.getLanguages();
     }
 
-    public BaiduTransResponse translateText(String query, String from, String to) throws NoSuchAlgorithmException, IOException {
+    @Override
+    public BaiduTransResponse translateText(String query, String from, String to) throws Exception {
         // q=apple&from=en&to=zh&appid=2015063000000001&salt=1435660288&sign=f89f9594663708c1605f3d736d01d2d4
         String url =
                 URL_PRE + "?q=" + URLEncoder.encode(query, Charsets.UTF_8.name()) + "&from=" + from + "&to=" + to + "&appid" +
