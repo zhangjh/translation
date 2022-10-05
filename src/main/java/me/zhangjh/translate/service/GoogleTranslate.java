@@ -1,30 +1,26 @@
-package me.zhangjh.translate;
+package me.zhangjh.translate.service;
 
 import com.google.cloud.translate.v3.*;
+import me.zhangjh.translate.constant.GGLanguage;
 
 import java.io.IOException;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author zhangjh
  * @date 2022/10/5
  */
 public class GoogleTranslate {
-    public static void main(String[] args) throws IOException {
-        GoogleTranslate.translateText();
-    }
 
-    // Set and pass variables to overloaded translateText() method for translation.
-    public static void translateText() throws IOException {
-        // TODO(developer): Replace these variables before running the sample.
-        String projectId = "njhxzhangjh";
-        // Supported Languages: https://cloud.google.com/translate/docs/languages
-        String targetLanguage = "en";
-        String text = "你干什么吃的呀";
-        translateText(projectId, targetLanguage, text);
+    private final String projectId;
+
+    {
+        projectId = System.getenv("GG_projectId");
     }
 
     // Translate text to target language.
-    public static void translateText(String projectId, String targetLanguage, String text)
+    private TranslateTextResponse translateText(String projectId, String targetLanguage, String text)
             throws IOException {
 
         // Initialize client that will be used to send requests. This client only needs to be created
@@ -45,12 +41,22 @@ public class GoogleTranslate {
                             .addContents(text)
                             .build();
 
-            TranslateTextResponse response = client.translateText(request);
-
-            // Display the translation for each input text provided
-            for (Translation translation : response.getTranslationsList()) {
-                System.out.printf("Translated text: %s\n", translation.getTranslatedText());
-            }
+            return client.translateText(request);
         }
+    }
+
+    public List<Map<String, String>> getLanguages() {
+        return GGLanguage.getLanguages();
+    }
+
+    public TranslateTextResponse translateText(String to, String text) throws IOException {
+        TranslateTextResponse response = this.translateText(projectId, to, text);
+
+        // Display the translation for each input text provided
+        for (Translation translation : response.getTranslationsList()) {
+            System.out.printf("Translated text: %s\n", translation.getTranslatedText());
+        }
+
+        return response;
     }
 }
