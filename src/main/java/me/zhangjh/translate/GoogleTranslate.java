@@ -19,7 +19,7 @@ public class GoogleTranslate {
         String projectId = "njhxzhangjh";
         // Supported Languages: https://cloud.google.com/translate/docs/languages
         String targetLanguage = "en";
-        String text = "翻译";
+        String text = "你干什么吃的呀";
         translateText(projectId, targetLanguage, text);
     }
 
