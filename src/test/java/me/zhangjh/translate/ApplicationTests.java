@@ -3,7 +3,10 @@ package me.zhangjh.translate;
 import com.alibaba.fastjson2.JSONObject;
 import me.zhangjh.translate.constant.BaiduLanguage;
 import me.zhangjh.translate.dto.BaiduTransResponse;
+import me.zhangjh.translate.dto.BingLanguageResponse;
+import me.zhangjh.translate.dto.BingTransResponse;
 import me.zhangjh.translate.service.BaiDuTranslate;
+import me.zhangjh.translate.service.BingTranslate;
 import me.zhangjh.translate.service.GoogleTranslate;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -40,4 +43,15 @@ class ApplicationTests {
         System.out.println(JSONObject.toJSONString(languages));
     }
 
+    @Test
+    void bingTranslate() {
+        List<BingTransResponse> responses = new BingTranslate().translateText("我爱中国", "zh", "en");
+        System.out.println(responses);
+    }
+
+    @Test
+    void bingLanguages() {
+        BingLanguageResponse languages = BingTranslate.getLanguages();
+        System.out.println(languages);
+    }
 }

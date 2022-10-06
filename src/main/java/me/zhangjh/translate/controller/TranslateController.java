@@ -36,7 +36,7 @@ public class TranslateController {
             Assert.isTrue(StringUtils.hasText(types), "翻译引擎为空");
             List<TranslateEngine> translateEngines = new ArrayList<>();
             for (String type : types.split(",")) {
-                translateEngines.add(TranslateEngineFactory.getTranslateEngine(type));
+                translateEngines.add(TranslateEngineFactory.getTranslateEngine(Integer.parseInt(type)));
             }
             Assert.isTrue(StringUtils.hasText(text), "待翻译文本为空");
             Assert.isTrue(StringUtils.hasText(to), "待翻译目标语种为空");
