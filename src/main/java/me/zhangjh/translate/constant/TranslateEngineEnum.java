@@ -4,6 +4,7 @@ import lombok.Getter;
 import me.zhangjh.translate.service.BingTranslate;
 import me.zhangjh.translate.service.GoogleTranslate;
 import me.zhangjh.translate.service.TranslateEngine;
+import me.zhangjh.translate.service.YouDaoTranslate;
 
 import java.util.Arrays;
 
@@ -16,6 +17,7 @@ public enum TranslateEngineEnum {
     BAIDU(0, new BingTranslate()),
     GOOGLE(1, new GoogleTranslate()),
     BING(2, new BingTranslate()),
+    YOUDAO(3, new YouDaoTranslate()),
     ;
 
     private Integer type;

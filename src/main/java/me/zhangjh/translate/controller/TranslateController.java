@@ -4,20 +4,16 @@ import com.google.cloud.translate.v3.TranslateTextResponse;
 import com.google.cloud.translate.v3.Translation;
 import me.zhangjh.translate.dto.BaiduTransResponse;
 import me.zhangjh.translate.dto.BaiduTransResult;
-import me.zhangjh.translate.service.BaiDuTranslate;
-import me.zhangjh.translate.service.GoogleTranslate;
-import me.zhangjh.translate.service.TranslateEngine;
-import me.zhangjh.translate.service.TranslateEngineFactory;
+import me.zhangjh.translate.dto.BingTransResponse;
+import me.zhangjh.translate.dto.YoudaoTransResponse;
+import me.zhangjh.translate.service.*;
 import org.springframework.util.Assert;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author zhangjh
@@ -51,16 +47,26 @@ public class TranslateController {
                         List<BaiduTransResult> transResults = response.getTransResults();
                         Assert.isTrue(!CollectionUtils.isEmpty(transResults), "翻译结果返回空");
                         String dst = transResults.get(0).getDst();
-                        map.put("百度", dst);
+                        map.put("baidu", dst);
                         res.add(map);
                     }
                 } else if(engine instanceof GoogleTranslate) {
                     TranslateTextResponse response = ((GoogleTranslate) engine).translateText(text, from, to);
                     for (Translation translation : response.getTranslationsList()) {
                         Map<String, String> map = new HashMap<>();
-                        map.put("谷歌", translation.getTranslatedText());
+                        map.put("google", translation.getTranslatedText());
                         res.add(map);
                     }
+                } else if(engine instanceof BingTranslate) {
+                    List<BingTransResponse> bingTransResponses = ((BingTranslate) engine).translateText(text, from, to);
+                    Map<String, String> map = new HashMap<>();
+                    map.put("Bing", bingTransResponses.get(0).getTranslations().get(0).getText());
+                    res.add(map);
+                } else if(engine instanceof YouDaoTranslate) {
+                    YoudaoTransResponse transResponse = ((YouDaoTranslate) engine).translateText(text, from, to);
+                    Map<String, String> map = new HashMap<>();
+                    map.put("Youdao", transResponse.getBasic());
+                    res.add(map);
                 }
             }
             return new Response<List<Map<String, String>>>().success(res);

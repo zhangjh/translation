@@ -5,9 +5,11 @@ import me.zhangjh.translate.constant.BaiduLanguage;
 import me.zhangjh.translate.dto.BaiduTransResponse;
 import me.zhangjh.translate.dto.BingLanguageResponse;
 import me.zhangjh.translate.dto.BingTransResponse;
+import me.zhangjh.translate.dto.YoudaoTransResponse;
 import me.zhangjh.translate.service.BaiDuTranslate;
 import me.zhangjh.translate.service.BingTranslate;
 import me.zhangjh.translate.service.GoogleTranslate;
+import me.zhangjh.translate.service.YouDaoTranslate;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -52,6 +54,18 @@ class ApplicationTests {
     @Test
     void bingLanguages() {
         BingLanguageResponse languages = BingTranslate.getLanguages();
+        System.out.println(languages);
+    }
+
+    @Test
+    void youdaoTranslate() {
+        YoudaoTransResponse response = new YouDaoTranslate().translateText("我爱中国", "zh-CHS", "en");
+        System.out.println(response);
+    }
+
+    @Test
+    void youdaoLanguage() {
+        List<Map<String, String>> languages = new YouDaoTranslate().getLanguages();
         System.out.println(languages);
     }
 }
