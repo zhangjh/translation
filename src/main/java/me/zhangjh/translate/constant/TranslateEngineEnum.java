@@ -1,10 +1,7 @@
 package me.zhangjh.translate.constant;
 
 import lombok.Getter;
-import me.zhangjh.translate.service.BingTranslate;
-import me.zhangjh.translate.service.GoogleTranslate;
-import me.zhangjh.translate.service.TranslateEngine;
-import me.zhangjh.translate.service.YouDaoTranslate;
+import me.zhangjh.translate.service.*;
 
 import java.util.Arrays;
 
@@ -14,7 +11,7 @@ import java.util.Arrays;
  */
 @Getter
 public enum TranslateEngineEnum {
-    BAIDU(0, new BingTranslate()),
+    BAIDU(0, new BaiDuTranslate()),
     GOOGLE(1, new GoogleTranslate()),
     BING(2, new BingTranslate()),
     YOUDAO(3, new YouDaoTranslate()),

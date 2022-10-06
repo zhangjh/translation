@@ -41,7 +41,7 @@ public class TranslateController {
                     BaiduTransResponse response = ((BaiDuTranslate) engine).translateText(text, from, to);
                     Map<String, String> map = new HashMap<>();
                     if(StringUtils.hasText(response.getErrorCode())) {
-                        map.put("百度", response.getErrorMsg());
+                        map.put("baidu", response.getErrorMsg());
                         res.add(map);
                     } else {
                         List<BaiduTransResult> transResults = response.getTransResults();
