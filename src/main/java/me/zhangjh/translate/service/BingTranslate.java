@@ -36,6 +36,7 @@ public class BingTranslate extends TranslateEngine<List<BingTransResponse>> {
         OkHttpClient client = new OkHttpClient();
         Request request = new Request.Builder()
                 .url(url).get()
+                .addHeader("accept-language", "zh-CN,zh;q=0.9,en-US;q=0.8,en;q=0.7")
                 .addHeader("Content-type", "application/json").build();
         Response response = client.newCall(request).execute();
         return JSON.parseObject(Objects.requireNonNull(response.body()).string(), BingLanguageResponse.class);
