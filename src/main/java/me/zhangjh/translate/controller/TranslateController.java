@@ -10,6 +10,7 @@ import me.zhangjh.translate.service.*;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.util.Assert;
 import org.springframework.util.CollectionUtils;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -20,6 +21,7 @@ import java.util.*;
  * @date 2022/10/5
  */
 @RestController
+@CrossOrigin
 public class TranslateController {
 
     @RequestMapping("/translate")
