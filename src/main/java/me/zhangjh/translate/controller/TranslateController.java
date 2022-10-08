@@ -1,5 +1,6 @@
 package me.zhangjh.translate.controller;
 
+import com.alibaba.fastjson2.JSONObject;
 import com.google.cloud.translate.v3.TranslateTextResponse;
 import com.google.cloud.translate.v3.Translation;
 import me.zhangjh.translate.dto.BaiduTransResponse;
@@ -97,6 +98,7 @@ public class TranslateController {
             Assert.isTrue(StringUtils.isNotEmpty(text), "待翻译文本为空");
             Assert.isTrue(StringUtils.isNotEmpty(to), "目标语种为空");
             TranslateTextResponse transResponse = new GoogleTranslate().translateText(text, from, to);
+            System.out.println(JSONObject.toJSONString(transResponse));
             if(StringUtils.isNotEmpty(transResponse.getInitializationErrorString())) {
                 return new Response<List<Translation>>().fail(transResponse.getInitializationErrorString());
             }
