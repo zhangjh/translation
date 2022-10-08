@@ -1,6 +1,5 @@
 package me.zhangjh.translate.controller;
 
-import com.alibaba.fastjson2.JSONObject;
 import com.google.cloud.translate.v3.TranslateTextResponse;
 import com.google.cloud.translate.v3.Translation;
 import me.zhangjh.translate.dto.BaiduTransResponse;
@@ -93,19 +92,21 @@ public class TranslateController {
     }
 
     @RequestMapping("/google")
-    public Response<List<Translation>> ggTranslateText(String text, String from, String to) {
+    public Response<String> ggTranslateText(String text, String from, String to) {
         try {
             Assert.isTrue(StringUtils.isNotEmpty(text), "待翻译文本为空");
             Assert.isTrue(StringUtils.isNotEmpty(to), "目标语种为空");
             TranslateTextResponse transResponse = new GoogleTranslate().translateText(text, from, to);
-            System.out.println(JSONObject.toJSONString(transResponse));
             if(StringUtils.isNotEmpty(transResponse.getInitializationErrorString())) {
-                return new Response<List<Translation>>().fail(transResponse.getInitializationErrorString());
+                return new Response<String>().fail(transResponse.getInitializationErrorString());
             }
             List<Translation> translationsList = transResponse.getTranslationsList();
-            return new Response<List<Translation>>().success(translationsList);
+            if(CollectionUtils.isEmpty(translationsList)) {
+                return new Response<String>().success("");
+            }
+            return new Response<String>().success(translationsList.get(0).getTranslatedText());
         } catch (Exception e) {
-            return new Response<List<Translation>>().fail(e.getMessage());
+            return new Response<String>().fail(e.getMessage());
         }
     }
 
