@@ -44,7 +44,7 @@ public class BaiDuTranslate extends TranslateEngine<BaiduTransResponse> {
         return new BigInteger(1, md5.digest()).toString(16);
     }
 
-    public List<Map<String, String>> getLanguages() {
+    public Map<String, String> getLanguages() {
         return BaiduLanguage.getLanguages();
     }
 

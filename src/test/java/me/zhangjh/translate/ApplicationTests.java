@@ -41,7 +41,7 @@ class ApplicationTests {
 
     @Test
     void baiduLanguages() {
-        List<Map<String, String>> languages = BaiduLanguage.getLanguages();
+        Map<String, String> languages = BaiduLanguage.getLanguages();
         System.out.println(JSONObject.toJSONString(languages));
     }
 
@@ -53,7 +53,7 @@ class ApplicationTests {
 
     @Test
     void bingLanguages() {
-        BingLanguageResponse languages = BingTranslate.getLanguages();
+        BingLanguageResponse languages = new BingTranslate().getLanguages();
         System.out.println(languages);
     }
 
@@ -65,7 +65,7 @@ class ApplicationTests {
 
     @Test
     void youdaoLanguage() {
-        List<Map<String, String>> languages = new YouDaoTranslate().getLanguages();
+        Map<String, String> languages = new YouDaoTranslate().getLanguages();
         System.out.println(languages);
     }
 }

@@ -31,7 +31,7 @@ public class BingTranslate extends TranslateEngine<List<BingTransResponse>> {
     }
 
     @SneakyThrows
-    public static BingLanguageResponse getLanguages() {
+    public BingLanguageResponse getLanguages() {
         String url = "https://api.cognitive.microsofttranslator.com/languages?api-version=3.0";
         OkHttpClient client = new OkHttpClient();
         Request request = new Request.Builder()

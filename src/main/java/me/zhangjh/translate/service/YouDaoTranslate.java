@@ -156,7 +156,7 @@ public class YouDaoTranslate extends TranslateEngine {
         return len <= 20 ? q : (q.substring(0, 10) + len + q.substring(len - 10, len));
     }
 
-    public List<Map<String, String>> getLanguages() {
+    public Map<String, String> getLanguages() {
         return YouDaoLanguage.getLanguages();
     }
 

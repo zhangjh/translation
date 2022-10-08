@@ -46,7 +46,7 @@ public class GoogleTranslate extends TranslateEngine<TranslateTextResponse> {
         }
     }
 
-    public List<Map<String, String>> getLanguages() {
+    public Map<String, String> getLanguages() {
         return GGLanguage.getLanguages();
     }
 

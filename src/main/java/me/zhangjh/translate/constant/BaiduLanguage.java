@@ -2,9 +2,7 @@ package me.zhangjh.translate.constant;
 
 import lombok.Getter;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -54,13 +52,11 @@ public enum BaiduLanguage {
         this.desc = desc;
     }
 
-    public static List<Map<String, String>> getLanguages() {
-        List<Map<String, String>> languages = new ArrayList<>();
+    public static Map<String, String> getLanguages() {
+        Map<String, String> langs = new HashMap<>();
         for (BaiduLanguage baiduLanguage : BaiduLanguage.values()) {
-            Map<String, String> map = new HashMap<>();
-            map.put(baiduLanguage.desc, baiduLanguage.code);
-            languages.add(map);
+            langs.put(baiduLanguage.desc, baiduLanguage.code);
         }
-        return languages;
+        return langs;
     }
 }

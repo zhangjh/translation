@@ -2,9 +2,7 @@ package me.zhangjh.translate.constant;
 
 import lombok.Getter;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -132,13 +130,11 @@ public enum GGLanguage {
         this.desc = desc;
     }
 
-    public static List<Map<String, String>> getLanguages() {
-        List<Map<String, String>> languages = new ArrayList<>();
+    public static Map<String, String> getLanguages() {
+        Map<String, String> langs = new HashMap<>();
         for (GGLanguage ggLanguage : GGLanguage.values()) {
-            Map<String, String> map = new HashMap<>();
-            map.put(ggLanguage.desc, ggLanguage.code);
-            languages.add(map);
+            langs.put(ggLanguage.desc, ggLanguage.code);
         }
-        return languages;
+        return langs;
     }
 }

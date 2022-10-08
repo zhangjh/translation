@@ -2,10 +2,7 @@ package me.zhangjh.translate.controller;
 
 import com.google.cloud.translate.v3.TranslateTextResponse;
 import com.google.cloud.translate.v3.Translation;
-import me.zhangjh.translate.dto.BaiduTransResponse;
-import me.zhangjh.translate.dto.BaiduTransResult;
-import me.zhangjh.translate.dto.BingTransResponse;
-import me.zhangjh.translate.dto.YoudaoTransResponse;
+import me.zhangjh.translate.dto.*;
 import me.zhangjh.translate.service.*;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.util.Assert;
@@ -95,6 +92,15 @@ public class TranslateController {
         }
     }
 
+    @RequestMapping("/baidu/lang")
+    public Response<Map<String, String>> baiduLang() {
+        try {
+            return new Response<Map<String, String>>().success(new BaiDuTranslate().getLanguages());
+        } catch (Exception e) {
+            return new Response<Map<String, String>>().fail(e.getMessage());
+        }
+    }
+
     @RequestMapping("/google")
     public Response<String> ggTranslateText(String text, String from, String to) {
         try {
@@ -114,6 +120,15 @@ public class TranslateController {
         }
     }
 
+    @RequestMapping("/google/lang")
+    public Response<Map<String, String>> ggLang() {
+        try {
+            return new Response<Map<String, String>>().success(new GoogleTranslate().getLanguages());
+        } catch (Exception e) {
+            return new Response<Map<String, String>>().fail(e.getMessage());
+        }
+    }
+
     @RequestMapping("/bing")
     public Response<String> bingTranslateText(String text, String from, String to) {
         try {
@@ -130,6 +145,22 @@ public class TranslateController {
         }
     }
 
+    @RequestMapping("/bing/lang")
+    public Response<Map<String, String>> bingLang() {
+        try {
+            Map<String, String> langs = new HashMap<>(1);
+            BingLanguageResponse languages = new BingTranslate().getLanguages();
+            for (Map.Entry<String, BingLanguageDTO> entry : languages.getTranslation().entrySet()) {
+                String key = entry.getKey();
+                String name = entry.getValue().getName();
+                langs.put(key, name);
+            }
+            return new Response<Map<String, String>>().success(langs);
+        } catch (Exception e) {
+            return new Response<Map<String, String>>().fail(e.getMessage());
+        }
+    }
+
     @RequestMapping("/youdao")
     public Response<YoudaoTransResponse> ydTranslateText(String text, String from, String to) {
         try {
@@ -142,6 +173,15 @@ public class TranslateController {
             return new Response<YoudaoTransResponse>().success(transResponse);
         } catch (Exception e) {
             return new Response<YoudaoTransResponse>().fail(e.getMessage());
+        }
+    }
+
+    @RequestMapping("/youdaoLang")
+    public Response<Map<String, String>> ydLang() {
+        try {
+            return new Response<Map<String, String>>().success(new YouDaoTranslate().getLanguages());
+        } catch (Exception e) {
+            return new Response<Map<String, String>>().fail(e.getMessage());
         }
     }
 }
