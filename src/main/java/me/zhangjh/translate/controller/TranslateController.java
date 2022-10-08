@@ -75,19 +75,23 @@ public class TranslateController {
             return new Response<String>().fail(t.getMessage());
         }
     }
+
     @RequestMapping("/baidu")
-    public Response<List<BaiduTransResult>> baiduTranslateText(String text, String from, String to) {
+    public Response<String> baiduTranslateText(String text, String from, String to) {
         try {
             Assert.isTrue(StringUtils.isNotEmpty(text), "待翻译文本为空");
             Assert.isTrue(StringUtils.isNotEmpty(to), "目标语种为空");
             BaiduTransResponse transResponse = new BaiDuTranslate().translateText(text, from, to);
             if(StringUtils.isNotEmpty(transResponse.getErrorCode())) {
-                return new Response<List<BaiduTransResult>>().fail(transResponse.getErrorMsg());
+                return new Response<String>().fail(transResponse.getErrorMsg());
             }
             List<BaiduTransResult> transResults = transResponse.getTransResults();
-            return new Response<List<BaiduTransResult>>().success(transResults);
+            if(CollectionUtils.isEmpty(transResults)) {
+                return new Response<String>().success("");
+            }
+            return new Response<String>().success(transResults.get(0).getDst());
         } catch (Exception e) {
-            return new Response<List<BaiduTransResult>>().fail(e.getMessage());
+            return new Response<String>().fail(e.getMessage());
         }
     }
 
@@ -111,14 +115,18 @@ public class TranslateController {
     }
 
     @RequestMapping("/bing")
-    public Response<List<BingTransResponse>> bingTranslateText(String text, String from, String to) {
+    public Response<String> bingTranslateText(String text, String from, String to) {
         try {
             Assert.isTrue(StringUtils.isNotEmpty(text), "待翻译文本为空");
             Assert.isTrue(StringUtils.isNotEmpty(to), "目标语种为空");
             List<BingTransResponse> transResponses = new BingTranslate().translateText(text, from, to);
-            return new Response<List<BingTransResponse>>().success(transResponses);
+            if(CollectionUtils.isEmpty(transResponses)
+                    || CollectionUtils.isEmpty(transResponses.get(0).getTranslations())) {
+                return new Response<String>().success(null);
+            }
+            return new Response<String>().success(transResponses.get(0).getTranslations().get(0).getTo());
         } catch (Exception e) {
-            return new Response<List<BingTransResponse>>().fail(e.getMessage());
+            return new Response<String>().fail(e.getMessage());
         }
     }
 

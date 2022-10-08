@@ -59,6 +59,9 @@ public class BingTranslate extends TranslateEngine<List<BingTransResponse>> {
                     .addHeader("Content-type", "application/json")
                     .build();
             Response response = client.newCall(request).execute();
+            if(response.code() != 200) {
+                throw new RuntimeException(response.message());
+            }
             return  JSON.parseArray(Objects.requireNonNull(response.body()).string(), BingTransResponse.class);
         } catch (Exception e) {
             e.printStackTrace();
