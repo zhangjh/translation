@@ -26,7 +26,7 @@ public class TranslateController {
 
     @RequestMapping("/translate")
     public Response translateText(String types, String text,
-                                                   String from, String to) throws Exception {
+                                                   String from, String to) {
         List<Map<String, String>> res = new ArrayList<>();
 
         try {
@@ -76,61 +76,61 @@ public class TranslateController {
         }
     }
     @RequestMapping("/baidu")
-    public Response baiduTranslateText(String text, String from, String to) {
+    public Response<List<BaiduTransResult>> baiduTranslateText(String text, String from, String to) {
         try {
             Assert.isTrue(StringUtils.isNotEmpty(text), "待翻译文本为空");
             Assert.isTrue(StringUtils.isNotEmpty(to), "目标语种为空");
             BaiduTransResponse transResponse = new BaiDuTranslate().translateText(text, from, to);
             if(StringUtils.isNotEmpty(transResponse.getErrorCode())) {
-                return new Response<>().fail(transResponse.getErrorMsg());
+                return new Response<List<BaiduTransResult>>().fail(transResponse.getErrorMsg());
             }
             List<BaiduTransResult> transResults = transResponse.getTransResults();
-            return new Response<>().success(transResults);
+            return new Response<List<BaiduTransResult>>().success(transResults);
         } catch (Exception e) {
-            return new Response<>().fail(e.getMessage());
+            return new Response<List<BaiduTransResult>>().fail(e.getMessage());
         }
     }
 
     @RequestMapping("/google")
-    public Response ggTranslateText(String text, String from, String to) {
+    public Response<List<Translation>> ggTranslateText(String text, String from, String to) {
         try {
             Assert.isTrue(StringUtils.isNotEmpty(text), "待翻译文本为空");
             Assert.isTrue(StringUtils.isNotEmpty(to), "目标语种为空");
             TranslateTextResponse transResponse = new GoogleTranslate().translateText(text, from, to);
             if(StringUtils.isNotEmpty(transResponse.getInitializationErrorString())) {
-                return new Response<>().fail(transResponse.getInitializationErrorString());
+                return new Response<List<Translation>>().fail(transResponse.getInitializationErrorString());
             }
             List<Translation> translationsList = transResponse.getTranslationsList();
-            return new Response<>().success(translationsList);
+            return new Response<List<Translation>>().success(translationsList);
         } catch (Exception e) {
-            return new Response<>().fail(e.getMessage());
+            return new Response<List<Translation>>().fail(e.getMessage());
         }
     }
 
     @RequestMapping("/bing")
-    public Response bingTranslateText(String text, String from, String to) {
+    public Response<List<BingTransResponse>> bingTranslateText(String text, String from, String to) {
         try {
             Assert.isTrue(StringUtils.isNotEmpty(text), "待翻译文本为空");
             Assert.isTrue(StringUtils.isNotEmpty(to), "目标语种为空");
             List<BingTransResponse> transResponses = new BingTranslate().translateText(text, from, to);
-            return new Response<>().success(transResponses);
+            return new Response<List<BingTransResponse>>().success(transResponses);
         } catch (Exception e) {
-            return new Response<>().fail(e.getMessage());
+            return new Response<List<BingTransResponse>>().fail(e.getMessage());
         }
     }
 
     @RequestMapping("/youdao")
-    public Response ydTranslateText(String text, String from, String to) {
+    public Response<YoudaoTransResponse> ydTranslateText(String text, String from, String to) {
         try {
             Assert.isTrue(StringUtils.isNotEmpty(text), "待翻译文本为空");
             Assert.isTrue(StringUtils.isNotEmpty(to), "目标语种为空");
             YoudaoTransResponse transResponse = new YouDaoTranslate().translateText(text, from, to);
             if(!Objects.equals(transResponse.getErrorCode(), "0")) {
-                return new Response<>().fail(transResponse.getErrorCode());
+                return new Response<YoudaoTransResponse>().fail(transResponse.getErrorCode());
             }
-            return new Response<>().success(transResponse);
+            return new Response<YoudaoTransResponse>().success(transResponse);
         } catch (Exception e) {
-            return new Response<>().fail(e.getMessage());
+            return new Response<YoudaoTransResponse>().fail(e.getMessage());
         }
     }
 }
