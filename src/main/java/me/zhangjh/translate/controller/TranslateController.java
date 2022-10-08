@@ -176,7 +176,7 @@ public class TranslateController {
         }
     }
 
-    @RequestMapping("/youdaoLang")
+    @RequestMapping("/youdao/lang")
     public Response<Map<String, String>> ydLang() {
         try {
             return new Response<Map<String, String>>().success(new YouDaoTranslate().getLanguages());
