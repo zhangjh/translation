@@ -55,7 +55,7 @@ public enum BaiduLanguage {
     public static Map<String, String> getLanguages() {
         Map<String, String> langs = new HashMap<>();
         for (BaiduLanguage baiduLanguage : BaiduLanguage.values()) {
-            langs.put(baiduLanguage.desc, baiduLanguage.code);
+            langs.put(baiduLanguage.code, baiduLanguage.desc);
         }
         return langs;
     }

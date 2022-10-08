@@ -125,12 +125,13 @@ public enum YouDaoLanguage {
     zu("南非祖鲁语","zu"),
     auto("自动识别","auto"),
         ;
-    // 语种标识
-    private String code;
+
     // 语种名称
     private String desc;
+    // 语种标识
+    private String code;
 
-    YouDaoLanguage(String code, String desc) {
+    YouDaoLanguage(String desc, String code) {
         this.code = code;
         this.desc = desc;
     }
@@ -138,7 +139,7 @@ public enum YouDaoLanguage {
     public static Map<String, String> getLanguages() {
         Map<String, String> langs = new HashMap<>();
         for (YouDaoLanguage ydLanguage : YouDaoLanguage.values()) {
-            langs.put(ydLanguage.desc, ydLanguage.code);
+            langs.put(ydLanguage.code, ydLanguage.desc);
         }
         return langs;
     }

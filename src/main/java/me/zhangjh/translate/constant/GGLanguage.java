@@ -120,12 +120,13 @@ public enum GGLanguage {
     yo("约鲁巴语","yo"),
     zu("祖鲁语","zu"),
     ;
-    // 语种标识
-    private String code;
+
     // 语种名称
     private String desc;
+    // 语种标识
+    private String code;
 
-    GGLanguage(String code, String desc) {
+    GGLanguage(String desc, String code) {
         this.code = code;
         this.desc = desc;
     }
@@ -133,7 +134,7 @@ public enum GGLanguage {
     public static Map<String, String> getLanguages() {
         Map<String, String> langs = new HashMap<>();
         for (GGLanguage ggLanguage : GGLanguage.values()) {
-            langs.put(ggLanguage.desc, ggLanguage.code);
+            langs.put(ggLanguage.code, ggLanguage.desc);
         }
         return langs;
     }
