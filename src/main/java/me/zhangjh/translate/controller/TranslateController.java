@@ -124,7 +124,7 @@ public class TranslateController {
                     || CollectionUtils.isEmpty(transResponses.get(0).getTranslations())) {
                 return new Response<String>().success(null);
             }
-            return new Response<String>().success(transResponses.get(0).getTranslations().get(0).getTo());
+            return new Response<String>().success(transResponses.get(0).getTranslations().get(0).getText());
         } catch (Exception e) {
             return new Response<String>().fail(e.getMessage());
         }
