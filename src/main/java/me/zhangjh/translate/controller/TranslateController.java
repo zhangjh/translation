@@ -1,5 +1,6 @@
 package me.zhangjh.translate.controller;
 
+import com.alibaba.fastjson2.JSONObject;
 import com.google.cloud.translate.v3.TranslateTextResponse;
 import com.google.cloud.translate.v3.Translation;
 import me.zhangjh.translate.dto.*;
@@ -162,17 +163,18 @@ public class TranslateController {
     }
 
     @RequestMapping("/youdao")
-    public Response<YoudaoTransResponse> ydTranslateText(String text, String from, String to) {
+    public Response<YoudaoBasicDTO> ydTranslateText(String text, String from, String to) {
         try {
             Assert.isTrue(StringUtils.isNotEmpty(text), "待翻译文本为空");
             Assert.isTrue(StringUtils.isNotEmpty(to), "目标语种为空");
             YoudaoTransResponse transResponse = new YouDaoTranslate().translateText(text, from, to);
             if(!Objects.equals(transResponse.getErrorCode(), "0")) {
-                return new Response<YoudaoTransResponse>().fail(transResponse.getErrorCode());
+                return new Response<YoudaoBasicDTO>().fail(transResponse.getErrorCode());
             }
-            return new Response<YoudaoTransResponse>().success(transResponse);
+            return new Response<YoudaoBasicDTO>().success(JSONObject.parseObject(transResponse.getBasic(),
+                    YoudaoBasicDTO.class));
         } catch (Exception e) {
-            return new Response<YoudaoTransResponse>().fail(e.getMessage());
+            return new Response<YoudaoBasicDTO>().fail(e.getMessage());
         }
     }
 
