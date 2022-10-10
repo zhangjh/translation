@@ -21,4 +21,6 @@ public class YoudaoBasicDTO {
     private String usPhonetic;
 
     private List<String> explains;
+
+    private List<String> translation;
 }
