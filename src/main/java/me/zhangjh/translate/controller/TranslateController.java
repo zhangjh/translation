@@ -163,18 +163,21 @@ public class TranslateController {
     }
 
     @RequestMapping("/youdao")
-    public Response<YoudaoBasicDTO> ydTranslateText(String text, String from, String to) {
+    public Response<Object> ydTranslateText(String text, String from, String to) {
         try {
             Assert.isTrue(StringUtils.isNotEmpty(text), "待翻译文本为空");
             Assert.isTrue(StringUtils.isNotEmpty(to), "目标语种为空");
             YoudaoTransResponse transResponse = new YouDaoTranslate().translateText(text, from, to);
             if(!Objects.equals(transResponse.getErrorCode(), "0")) {
-                return new Response<YoudaoBasicDTO>().fail(transResponse.getErrorCode());
+                return new Response<>().fail(transResponse.getErrorCode());
             }
-            return new Response<YoudaoBasicDTO>().success(JSONObject.parseObject(transResponse.getBasic(),
-                    YoudaoBasicDTO.class));
+            YoudaoBasicDTO youdaoBasicDTO = JSONObject.parseObject(transResponse.getBasic(), YoudaoBasicDTO.class);
+            if(youdaoBasicDTO != null) {
+                return new Response<>().success(youdaoBasicDTO);
+            }
+            else return new Response<>().success(transResponse.getTranslation());
         } catch (Exception e) {
-            return new Response<YoudaoBasicDTO>().fail(e.getMessage());
+            return new Response<>().fail(e.getMessage());
         }
     }
 
