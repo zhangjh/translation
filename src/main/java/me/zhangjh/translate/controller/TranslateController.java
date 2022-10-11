@@ -24,7 +24,7 @@ public class TranslateController {
 
     @RequestMapping("/translate")
     public Response translateText(String types, String text,
-                                                   String from, String to) {
+                                  String from, String to, String appId, String appSecret) {
         List<Map<String, String>> res = new ArrayList<>();
 
         try {
@@ -35,9 +35,15 @@ public class TranslateController {
             }
             Assert.isTrue(StringUtils.isNotEmpty(text), "待翻译文本为空");
             Assert.isTrue(StringUtils.isNotEmpty(to), "待翻译目标语种为空");
+            TranslateRequest request = new TranslateRequest();
+            request.setText(text);
+            request.setFrom(from);
+            request.setTo(to);
             for (TranslateEngine engine : translateEngines) {
                 if(engine instanceof BaiDuTranslate) {
-                    BaiduTransResponse response = ((BaiDuTranslate) engine).translateText(text, from, to);
+                    request.setAppId(appId);
+                    request.setAppSecret(appSecret);
+                    BaiduTransResponse response = ((BaiDuTranslate) engine).translateText(request);
                     Map<String, String> map = new HashMap<>();
                     if(StringUtils.isNotEmpty(response.getErrorCode())) {
                         map.put("baidu", response.getErrorMsg());
@@ -50,19 +56,21 @@ public class TranslateController {
                         res.add(map);
                     }
                 } else if(engine instanceof GoogleTranslate) {
-                    TranslateTextResponse response = ((GoogleTranslate) engine).translateText(text, from, to);
+                    TranslateTextResponse response = ((GoogleTranslate) engine).translateText(request);
                     for (Translation translation : response.getTranslationsList()) {
                         Map<String, String> map = new HashMap<>();
                         map.put("google", translation.getTranslatedText());
                         res.add(map);
                     }
                 } else if(engine instanceof BingTranslate) {
-                    List<BingTransResponse> bingTransResponses = ((BingTranslate) engine).translateText(text, from, to);
+                    List<BingTransResponse> bingTransResponses = ((BingTranslate) engine).translateText(request);
                     Map<String, String> map = new HashMap<>();
                     map.put("Bing", bingTransResponses.get(0).getTranslations().get(0).getText());
                     res.add(map);
                 } else if(engine instanceof YouDaoTranslate) {
-                    YoudaoTransResponse transResponse = ((YouDaoTranslate) engine).translateText(text, from, to);
+                    request.setAppId(appId);
+                    request.setAppSecret(appSecret);
+                    YoudaoTransResponse transResponse = ((YouDaoTranslate) engine).translateText(request);
                     Map<String, String> map = new HashMap<>();
                     map.put("Youdao", transResponse.getBasic());
                     res.add(map);
@@ -75,11 +83,19 @@ public class TranslateController {
     }
 
     @RequestMapping("/baidu")
-    public Response<String> baiduTranslateText(String text, String from, String to) {
+    public Response<String> baiduTranslateText(String text, String from, String to, String appId, String appSecret) {
         try {
             Assert.isTrue(StringUtils.isNotEmpty(text), "待翻译文本为空");
             Assert.isTrue(StringUtils.isNotEmpty(to), "目标语种为空");
-            BaiduTransResponse transResponse = new BaiDuTranslate().translateText(text, from, to);
+            Assert.isTrue(StringUtils.isNotEmpty(appId), "appId为空");
+            Assert.isTrue(StringUtils.isNotEmpty(appSecret), "appSecret为空");
+            TranslateRequest request = new TranslateRequest();
+            request.setText(text);
+            request.setFrom(from);
+            request.setTo(to);
+            request.setAppId(appId);
+            request.setAppSecret(appSecret);
+            BaiduTransResponse transResponse = new BaiDuTranslate().translateText(request);
             if(StringUtils.isNotEmpty(transResponse.getErrorCode())) {
                 return new Response<String>().fail(transResponse.getErrorMsg());
             }
@@ -107,7 +123,11 @@ public class TranslateController {
         try {
             Assert.isTrue(StringUtils.isNotEmpty(text), "待翻译文本为空");
             Assert.isTrue(StringUtils.isNotEmpty(to), "目标语种为空");
-            TranslateTextResponse transResponse = new GoogleTranslate().translateText(text, from, to);
+            TranslateRequest request = new TranslateRequest();
+            request.setText(text);
+            request.setFrom(from);
+            request.setTo(to);
+            TranslateTextResponse transResponse = new GoogleTranslate().translateText(request);
             if(StringUtils.isNotEmpty(transResponse.getInitializationErrorString())) {
                 return new Response<String>().fail(transResponse.getInitializationErrorString());
             }
@@ -135,7 +155,11 @@ public class TranslateController {
         try {
             Assert.isTrue(StringUtils.isNotEmpty(text), "待翻译文本为空");
             Assert.isTrue(StringUtils.isNotEmpty(to), "目标语种为空");
-            List<BingTransResponse> transResponses = new BingTranslate().translateText(text, from, to);
+            TranslateRequest request = new TranslateRequest();
+            request.setText(text);
+            request.setFrom(from);
+            request.setTo(to);
+            List<BingTransResponse> transResponses = new BingTranslate().translateText(request);
             if(CollectionUtils.isEmpty(transResponses)
                     || CollectionUtils.isEmpty(transResponses.get(0).getTranslations())) {
                 return new Response<String>().success(null);
@@ -163,11 +187,18 @@ public class TranslateController {
     }
 
     @RequestMapping("/youdao")
-    public Response<YoudaoBasicDTO> ydTranslateText(String text, String from, String to) {
+    public Response<YoudaoBasicDTO> ydTranslateText(String text, String from, String to, String appId,
+                                                    String appSecret) {
         try {
             Assert.isTrue(StringUtils.isNotEmpty(text), "待翻译文本为空");
             Assert.isTrue(StringUtils.isNotEmpty(to), "目标语种为空");
-            YoudaoTransResponse transResponse = new YouDaoTranslate().translateText(text, from, to);
+            TranslateRequest request = new TranslateRequest();
+            request.setText(text);
+            request.setFrom(from);
+            request.setTo(to);
+            request.setAppId(appId);
+            request.setAppSecret(appSecret);
+            YoudaoTransResponse transResponse = new YouDaoTranslate().translateText(request);
             if(!Objects.equals(transResponse.getErrorCode(), "0")) {
                 return new Response<YoudaoBasicDTO>().fail(transResponse.getErrorCode());
             }

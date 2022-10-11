@@ -2,10 +2,7 @@ package me.zhangjh.translate;
 
 import com.alibaba.fastjson2.JSONObject;
 import me.zhangjh.translate.constant.BaiduLanguage;
-import me.zhangjh.translate.dto.BaiduTransResponse;
-import me.zhangjh.translate.dto.BingLanguageResponse;
-import me.zhangjh.translate.dto.BingTransResponse;
-import me.zhangjh.translate.dto.YoudaoTransResponse;
+import me.zhangjh.translate.dto.*;
 import me.zhangjh.translate.service.BaiDuTranslate;
 import me.zhangjh.translate.service.BingTranslate;
 import me.zhangjh.translate.service.GoogleTranslate;
@@ -24,18 +21,29 @@ class ApplicationTests {
     void contextLoads() throws IOException {
         // TODO(developer): Replace these variables before running the sample.
         // Supported Languages: https://cloud.google.com/translate/docs/languages
-        String targetLanguage = "zh";
-        String fromLanguage = "en";
         String text = "english";
-        new GoogleTranslate().translateText(text, fromLanguage, targetLanguage);
+        TranslateRequest request = new TranslateRequest();
+        request.setText(text);
+        request.setFrom("en");
+        request.setTo("zh");
+        new GoogleTranslate().translateText(request);
     }
 
     @Test
     void baiduTranslate() throws Exception {
-        BaiduTransResponse response1 = new BaiDuTranslate().translateText("我爱我家", "zh", "en");
+        TranslateRequest request = new TranslateRequest();
+        request.setText("我爱我家");
+        request.setFrom("zh");
+        request.setTo("en");
+        request.setAppId(System.getenv("baidu_fy_appId"));
+        request.setAppSecret(System.getenv("baidu_fy_appSecret"));
+        BaiduTransResponse response1 = new BaiDuTranslate().translateText(request);
         System.out.println(response1);
 
-        BaiduTransResponse response2 = new BaiDuTranslate().translateText("My heart will go on", "en", "zh");
+        request.setText("My heart will go on");
+        request.setFrom("en");
+        request.setTo("zh");
+        BaiduTransResponse response2 = new BaiDuTranslate().translateText(request);
         System.out.println(response2);
     }
 
@@ -47,7 +55,11 @@ class ApplicationTests {
 
     @Test
     void bingTranslate() {
-        List<BingTransResponse> responses = new BingTranslate().translateText("我爱中国", "zh", "en");
+        TranslateRequest request = new TranslateRequest();
+        request.setText("我爱中国");
+        request.setFrom("zh");
+        request.setTo("en");
+        List<BingTransResponse> responses = new BingTranslate().translateText(request);
         System.out.println(responses);
     }
 
@@ -59,7 +71,13 @@ class ApplicationTests {
 
     @Test
     void youdaoTranslate() {
-        YoudaoTransResponse response = new YouDaoTranslate().translateText("我爱中国", "zh-CHS", "en");
+        TranslateRequest request = new TranslateRequest();
+        request.setText("我爱中国");
+        request.setFrom("zh-CHS");
+        request.setTo("en");
+        request.setAppId(System.getenv("youdao_appKey"));
+        request.setAppSecret(System.getenv("youdao_appSecret"));
+        YoudaoTransResponse response = new YouDaoTranslate().translateText(request);
         System.out.println(response);
     }
 

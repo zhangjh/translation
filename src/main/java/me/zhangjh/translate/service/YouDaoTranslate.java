@@ -3,6 +3,7 @@ package me.zhangjh.translate.service;
 import com.alibaba.fastjson2.JSONObject;
 import com.google.common.base.Charsets;
 import me.zhangjh.translate.constant.YouDaoLanguage;
+import me.zhangjh.translate.dto.TranslateRequest;
 import me.zhangjh.translate.dto.YoudaoTransResponse;
 import org.apache.http.Header;
 import org.apache.http.HttpEntity;
@@ -35,16 +36,7 @@ public class YouDaoTranslate extends TranslateEngine {
 
     private static final String YOUDAO_URL = "https://openapi.youdao.com/api";
 
-    private final String APP_KEY;
-
-    private final String APP_SECRET;
-
-    {
-        APP_KEY = System.getenv("youdao_appKey");
-        APP_SECRET = System.getenv("youdao_appSecret");
-    }
-
-    private Map<String, String> genParam(String q, String from, String to) {
+    private Map<String, String> genParam(String q, String from, String to, String appId, String appSecret) {
         Map<String,String> params = new HashMap<>();
         String salt = String.valueOf(System.currentTimeMillis());
         params.put("from", from);
@@ -52,9 +44,9 @@ public class YouDaoTranslate extends TranslateEngine {
         params.put("signType", "v3");
         String curtime = String.valueOf(System.currentTimeMillis() / 1000);
         params.put("curtime", curtime);
-        String signStr = APP_KEY + truncate(q) + salt + curtime + APP_SECRET;
+        String signStr = appId + truncate(q) + salt + curtime + appSecret;
         String sign = getDigest(signStr);
-        params.put("appKey", APP_KEY);
+        params.put("appKey", appId);
         params.put("q", q);
         params.put("salt", salt);
         params.put("sign", sign);
@@ -161,9 +153,10 @@ public class YouDaoTranslate extends TranslateEngine {
     }
 
     @Override
-    public YoudaoTransResponse translateText(String query, String from, String to) {
+    public YoudaoTransResponse translateText(TranslateRequest translateRequest) {
         try {
-            return requestForHttp(YOUDAO_URL, genParam(query, from, to));
+            return requestForHttp(YOUDAO_URL, genParam(translateRequest.getText(), translateRequest.getFrom(),
+                    translateRequest.getTo(), translateRequest.getAppId(), translateRequest.getAppSecret()));
         } catch (IOException e) {
             e.printStackTrace();
             throw new RuntimeException(e.getMessage());

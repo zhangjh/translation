@@ -2,9 +2,9 @@ package me.zhangjh.translate.service;
 
 import com.google.cloud.translate.v3.*;
 import me.zhangjh.translate.constant.GGLanguage;
+import me.zhangjh.translate.dto.TranslateRequest;
 
 import java.io.IOException;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -51,8 +51,9 @@ public class GoogleTranslate extends TranslateEngine<TranslateTextResponse> {
     }
 
     @Override
-    public TranslateTextResponse translateText(String query, String from, String to) throws IOException {
-        TranslateTextResponse response = this.translateText(projectId, from, to, query);
+    public TranslateTextResponse translateText(TranslateRequest request) throws IOException {
+        TranslateTextResponse response = this.translateText(projectId, request.getFrom(), request.getTo(),
+                request.getText());
 
         // Display the translation for each input text provided
         for (Translation translation : response.getTranslationsList()) {

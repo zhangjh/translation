@@ -5,6 +5,7 @@ import com.alibaba.fastjson2.JSONObject;
 import lombok.SneakyThrows;
 import me.zhangjh.translate.dto.BingLanguageResponse;
 import me.zhangjh.translate.dto.BingTransResponse;
+import me.zhangjh.translate.dto.TranslateRequest;
 import okhttp3.*;
 
 import java.util.Collections;
@@ -43,17 +44,17 @@ public class BingTranslate extends TranslateEngine<List<BingTransResponse>> {
     }
 
     @Override
-    public List<BingTransResponse> translateText(String query, String from, String to) {
+    public List<BingTransResponse> translateText(TranslateRequest translateRequest) {
         try {
             OkHttpClient client = new OkHttpClient();
             // 将待搜词组装成形如["Text": "待搜词"]的格式
             JSONObject jsonVal = new JSONObject();
-            jsonVal.put("Text", query);
+            jsonVal.put("Text", translateRequest.getText());
             // query: "[{\"Text\": \"I would really like to drive your car around the block a few times!\"}]"
             RequestBody body = RequestBody.create(JSONObject.toJSONString(Collections.singleton(jsonVal)), MEDIA_TYPE);
 
             Request request = new Request.Builder()
-                    .url(URL_PRE + "&from=" + from + "&to=" + to)
+                    .url(URL_PRE + "&from=" + translateRequest.getFrom() + "&to=" + translateRequest.getTo())
                     .post(body)
                     .addHeader("Ocp-Apim-Subscription-Key", key)
                     .addHeader("Ocp-Apim-Subscription-Region", location)
