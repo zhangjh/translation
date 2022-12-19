@@ -19,4 +19,7 @@ public class TranslateRequest {
     private String appId;
 
     private String appSecret;
+
+    /** 是否翻译模式，默认true，普通chatGpt时传递false */
+    private Boolean transMode = true;
 }

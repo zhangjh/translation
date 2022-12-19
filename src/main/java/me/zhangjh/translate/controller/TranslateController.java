@@ -6,6 +6,7 @@ import com.google.cloud.translate.v3.Translation;
 import me.zhangjh.translate.dto.*;
 import me.zhangjh.translate.service.*;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.Assert;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -21,6 +22,9 @@ import java.util.*;
 @RestController
 @CrossOrigin
 public class TranslateController {
+
+    @Autowired
+    private ChatGPTTranslate chatGPTTranslate;
 
     @RequestMapping("/translate")
     public Response translateText(String types, String text,
@@ -219,6 +223,20 @@ public class TranslateController {
             return new Response<Map<String, String>>().success(new YouDaoTranslate().getLanguages());
         } catch (Exception e) {
             return new Response<Map<String, String>>().fail(e.getMessage());
+        }
+    }
+
+    @RequestMapping("/chatGpt")
+    public Response<String> chatGpt(String text, String transMode) {
+        try {
+            TranslateRequest request = new TranslateRequest();
+            request.setText(text);
+            request.setTransMode(Boolean.parseBoolean(transMode));
+            request.setAppId("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");
+            String responses = chatGPTTranslate.translateText(request);
+            return new Response<String>().success(responses);
+        } catch (Exception e) {
+            return new Response<String>().fail(e.getMessage());
         }
     }
 }
