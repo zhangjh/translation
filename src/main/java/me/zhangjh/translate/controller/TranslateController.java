@@ -9,9 +9,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.Assert;
 import org.springframework.util.CollectionUtils;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
 
@@ -86,19 +84,18 @@ public class TranslateController {
         }
     }
 
-    @RequestMapping("/baidu")
-    public Response<String> baiduTranslateText(String text, String from, String to, String appId, String appSecret) {
+    @PostMapping("/baidu")
+    public Response<String> baiduTranslateText(@RequestBody BaiduTransRequest baiduTransRequest) {
         try {
-            Assert.isTrue(StringUtils.isNotEmpty(text), "待翻译文本为空");
-            Assert.isTrue(StringUtils.isNotEmpty(to), "目标语种为空");
-            Assert.isTrue(StringUtils.isNotEmpty(appId), "appId为空");
-            Assert.isTrue(StringUtils.isNotEmpty(appSecret), "appSecret为空");
+            Assert.isTrue(StringUtils.isNotEmpty(baiduTransRequest.getText()), "待翻译文本为空");
+            Assert.isTrue(StringUtils.isNotEmpty(baiduTransRequest.getTo()), "目标语种为空");
+
             TranslateRequest request = new TranslateRequest();
-            request.setText(text);
-            request.setFrom(from);
-            request.setTo(to);
-            request.setAppId(appId);
-            request.setAppSecret(appSecret);
+            request.setText(baiduTransRequest.getText());
+            request.setFrom(baiduTransRequest.getFrom());
+            request.setTo(baiduTransRequest.getTo());
+            request.setAppId("20221005001370895");
+            request.setAppSecret("E3UD2nYo0yK2miFeUYNq");
             BaiduTransResponse transResponse = new BaiDuTranslate().translateText(request);
             if(StringUtils.isNotEmpty(transResponse.getErrorCode())) {
                 return new Response<String>().fail(transResponse.getErrorMsg());
