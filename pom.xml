@@ -62,6 +62,11 @@
             <artifactId>chatgpt-starter</artifactId>
             <version>1.0.14</version>
         </dependency>
+        <dependency>
+            <groupId>me.zhangjh</groupId>
+            <artifactId>gemini.sdk</artifactId>
+            <version>1.4</version>
+        </dependency>
     </dependencies>
 
     <dependencyManagement>

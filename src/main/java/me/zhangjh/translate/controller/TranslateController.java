@@ -24,6 +24,9 @@ public class TranslateController {
     @Autowired
     private ChatGPTTranslate chatGPTTranslate;
 
+    @Autowired
+    private GeminiTranslate geminiTranslate;
+
     @RequestMapping("/translate")
     public Response translateText(String types, String text,
                                   String from, String to, String appId, String appSecret) {
@@ -232,6 +235,16 @@ public class TranslateController {
             request.setAppId("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");
             String responses = chatGPTTranslate.translateText(request);
             return new Response<String>().success(responses);
+        } catch (Exception e) {
+            return new Response<String>().fail(e.getMessage());
+        }
+    }
+
+    @PostMapping("/gemini")
+    public Response<String> geminiStream(@RequestBody TranslateRequest request) {
+        try {
+            String res = geminiTranslate.translateText(request);
+            return new Response<String>().success(res);
         } catch (Exception e) {
             return new Response<String>().fail(e.getMessage());
         }

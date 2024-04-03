@@ -34,7 +34,7 @@ public class ChatGPTTranslate extends TranslateEngine<String> {
             textRequest.setPrompt("Q:" + request.getText() + " A:");
         }
         TextResponse textCompletion = chatGptService.createTextCompletion(textRequest);
-        System.out.println(textCompletion);
+//        System.out.println(textCompletion);
         if(StringUtils.isNotEmpty(textCompletion.getErrorMsg())) {
             throw new RuntimeException(textCompletion.getErrorMsg());
         }
