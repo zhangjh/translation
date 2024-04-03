@@ -27,8 +27,8 @@ public class GeminiTranslate extends TranslateEngine<String> {
                             "我会通过语言标识告知你待翻译内容是什么语种，zh表示中文，en" +
                             "表示英文，如果未给出请自行判断。" +
                             "待翻译内容: {{{ " + text + " }}}";
-            if(StringUtils.isNotEmpty(translateRequest.getTo())) {
-                prompt += ", 语种：" + translateRequest.getTo();
+            if(StringUtils.isNotEmpty(translateRequest.getFrom())) {
+                prompt += ", 语种：" + translateRequest.getFrom();
             }
             TextResponse response = geminiService.generateByText(prompt);
             return response.getCandidates().get(0).getContent().getParts().get(0).getText();
